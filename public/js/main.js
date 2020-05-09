@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    $.getJSON( "../data/data.json", jsonLoadedCallback)
+    $.getJSON( "./data/data.json", jsonLoadedCallback)
     var idx;
     var data;
     var loadedTime, withoutAnchorsTime, withAnchorsTime;
@@ -49,8 +49,8 @@ $(document).ready(function(){
         post_data["index"] = idx
         post_data["without_anchor"] = $("input[name=without-anchor]:checked").val()
         post_data["with_anchor"] = $("input[name=with-anchor]:checked").val()
-        post_data["actual_label"] = 0 ? data["actual_label"] == "<=50K" : 1
-        post_data["predicted_label"] = 0 ? data["predicted_label"] == "<=50K" : 1
+        post_data["actual_label"] = data["actual_label"] == "<=50K" ? 0 : 1 
+        post_data["predicted_label"] = data["predicted_label"] == "<=50K" ? 0 : 1
         post_data["anchors"] = data["anchors"]
         post_data["input_data"] = data["input_data"]
         post_data["without_anchor_reaction_time"] = (withoutAnchorsTime - loadedTime)/1000
