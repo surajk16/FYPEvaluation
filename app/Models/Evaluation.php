@@ -8,6 +8,4 @@ class Evaluation extends Model
 {
     protected $table = 'evaluations';
     public $timestamps = false;
-    protected $primaryKey = 'idx';
-    public $incrementing = false;
 }

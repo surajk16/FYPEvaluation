@@ -23,6 +23,8 @@ class EvaluationController extends Controller {
                 "with_anchor" => 'required|integer',
                 "actual_label" => 'required|string',
                 "predicted_label" => 'required|string',
+                "without_anchor_reaction_time" => 'required|numeric',
+                "with_anchor_reaction_time" => 'required|numeric',
             ]);
 
             if ($validator->fails()) {
@@ -38,20 +40,11 @@ class EvaluationController extends Controller {
             $with_anchor = $request->input('with_anchor');
             $anchors = $request->input('anchors');
             $input_data = $request->input('input_data');
+            $without_anchor_reaction_time = $request->input('without_anchor_reaction_time');
+            $with_anchor_reaction_time = $request->input('with_anchor_reaction_time');
 
             $eval = Evaluation::where('idx', '=', $index)->first();
             if ($eval == null) {
-                $eval = new Evaluation;
-                $eval->idx = $index;
-                $eval->actual_label = $actual_label;
-                $eval->predicted_label = $predicted_label;
-                $eval->without_anchor = $without_anchor;
-                $eval->with_anchor = $with_anchor;
-                $eval->total_tries = 1;
-
-                $eval->save();
-
-
                 $ip_data = new InputData;
                 $ip_data->idx =             $index;
                 $ip_data->occupation =      $input_data['Occupation'];
@@ -84,13 +77,18 @@ class EvaluationController extends Controller {
 
                 $anchor->save();
             
-            } else {
-                $eval->without_anchor = $eval->without_anchor + $without_anchor;
-                $eval->with_anchor = $eval->with_anchor + $with_anchor;
-                $eval->total_tries = $eval->total_tries + 1;
+            } 
 
-                $eval->save();
-            }
+            $eval = new Evaluation;
+            $eval->idx = $index;
+            $eval->actual_label = $actual_label;
+            $eval->predicted_label = $predicted_label;
+            $eval->without_anchor = $without_anchor;
+            $eval->with_anchor = $with_anchor;
+            $eval->without_anchor_reaction_time = $without_anchor_reaction_time;
+            $eval->with_anchor_reaction_time = $with_anchor_reaction_time;
+
+            $eval->save();
 
             $status_code = 200;
             $response    = "Saved response successfully!";
